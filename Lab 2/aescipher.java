@@ -38,6 +38,7 @@ public class aescipher {
 
   String hexResult = Integer.toHexString(Integer.valueOf(result, 2));
   return hexResult.length() == 4 ? ("0" + hexResult) : hexResult;
+  
  }
 
  private static String pad(String var, int numOfBits) {
@@ -56,11 +57,17 @@ public class aescipher {
  private static void generateWMatrix() {
 
   for (int i = 0; i < 4; i = i + 1) {
-   for (int j = 0; j < 44; j++) {
+    for (int j = 0; j < 4; j++) {
+     W_Matrix[i][j] = keyHex[i][j];
+    }
+  }
+  
+  for (int i = 0; i < 4; i = i + 1) {
+   for (int j = 4; j < 44; j++) {
     if (j < 4) {
      W_Matrix[i][j] = keyHex[i][j];
     } else {
-     if (j % 4 == 0) {
+     if (j % 4 != 0) {
       W_Matrix[i][j] = computeXOR(W_Matrix[i][j - 4], W_Matrix[i][j - 1]);
      } else {
 
@@ -68,6 +75,7 @@ public class aescipher {
     }
    }
   }
+  
  }
 
  private static void generateKeyMatrix(String input) {
