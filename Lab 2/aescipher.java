@@ -46,6 +46,36 @@ public class aescipher {
  private static String[][] keyHex = new String[4][4];
 
  public static String[][] W_Matrix = new String[4][44];
+ 
+ /**
+  * This method is responsible for the following task:
+  * 1) generates and prints the Round Keys
+  * 2) Call respective helper methods to generate Key matrix and W_MATRIX
+  * 3) finally print all the 11 Round Key sets using W_MATRIX
+  * 
+  */
+ public static String aesRoundKeys(String input) {
+ 
+ //Call the helper method to generate Key Matrix
+ generateKeyMatrix(input);
+
+ //Call the helper method to generate W_Matrix
+ generateWMatrix();
+
+ //Append the final Output to StringBuffer
+ StringBuffer result = new StringBuffer();
+  for (int j = 0; j < 44; j = j + 1) {
+   for (int i = 0; i < 4; i= i+1) {
+   result.append(aescipher.W_Matrix[i][j]);
+   }
+   if(j>2 && (j+1)%4 == 0){
+   result.append("\n");
+   }
+  }
+  
+  return result.toString();
+
+ }
 
  /**
   * The method 'generateWMatrix' is responsible for generating the W_Matrix
@@ -223,33 +253,6 @@ public class aescipher {
    }
    System.out.println();
   }
- }
-
- /**
-  * This method prints the Round Keys
-  * from W_MATRIX in the form of 11 Round Key sets
-  */
- public static String aesRoundKeys(String input) {
- 
- //Call the helper method to generate Key Matrix
- generateKeyMatrix(input);
-
- //Call the helper method to generate W_Matrix
- generateWMatrix();
-
- //Append the final Output to StringBuffer
- StringBuffer result = new StringBuffer();
-  for (int j = 0; j < 44; j = j + 1) {
-   for (int i = 0; i < 4; i= i+1) {
-   result.append(aescipher.W_Matrix[i][j]);
-   }
-   if(j>2 && (j+1)%4 == 0){
-   result.append("\n");
-   }
-  }
-  
-  return result.toString();
-
  }
 
 }
