@@ -52,8 +52,12 @@ public class aescipher {
   * using which the round keys are derived. Every 5th column will indicate a
   * 'Round'.
   * 
-  * Suppose the iteration is j=4, Current round, i = j/4 if (j mod 4 != 0 )
-  * w(j) = w(j - 4) XOR w(j - 1) if (j mod 4 == 0 ) w(j) = w(j - 4) XOR Wnew
+  * Suppose the iteration is j=4, Current round, i = j/4 
+  * if (j mod 4 != 0 )
+  *  w(j) = w(j - 4) XOR w(j - 1) 
+  *  
+  * if (j mod 4 == 0 ) 
+  *  w(j) = w(j - 4) XOR Wnew
   * Here 'Wnew' is to be computed using history W_Matrix, S_BOX and R_CON
   * values.
   * 
@@ -76,12 +80,10 @@ public class aescipher {
    } else {
     w_new = new String[1][4];
 
-    w_new[0][0] = W_Matrix[0][j - 1];
-    w_new[0][1] = W_Matrix[1][j - 1];
-    w_new[0][2] = W_Matrix[2][j - 1];
-    w_new[0][3] = W_Matrix[3][j - 1];
-
-    // Left-Shift ; S_BOX ; R_CON
+    for(int i=0;i<4;i++){
+     w_new[0][i] = W_Matrix[i][j - 1];
+    }
+    // Left-Shift ; S_BOX ; R_CON are all together done in the below lines of code
 
     w_new[0][0] = computeXOR(aesRcon(j), aesSBox(W_Matrix[1][j - 1]));
 
@@ -89,8 +91,12 @@ public class aescipher {
 
     w_new[0][2] = aesSBox(W_Matrix[3][j - 1]);
 
+    //identify the first row element shifted to the bottom index
     w_new[0][3] = aesSBox(W_Matrix[0][j - 1]);
 
+    //Compute XOR of Wnew and (j-4) element of W_MATRIX for i-th row
+    // w(j) = w(j - 4) XOR Wnew
+    //Assign the result to W_MATRIX
     for (int i = 0; i < 4; i++) {
      W_Matrix[i][j] = computeXOR(W_Matrix[i][j - 4], w_new[0][i]);
     }
