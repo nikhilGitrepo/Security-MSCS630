@@ -64,12 +64,12 @@ public class aescipher {
 
  //Append the final Output to StringBuffer
  StringBuffer result = new StringBuffer();
-  for (int j = 0; j < 44; j = j + 1) {
-   for (int i = 0; i < 4; i= i+1) {
-   result.append(aescipher.W_Matrix[i][j]);
+   for (int j = 0; j < 44; j = j + 1) {
+     for (int i = 0; i < 4; i= i+1) {
+       result.append(aescipher.W_Matrix[i][j]);
    }
    if(j>2 && (j+1)%4 == 0){
-   result.append("\n");
+     result.append("\n");
    }
   }
   
@@ -96,40 +96,40 @@ public class aescipher {
  public static void generateWMatrix() {
 
   for (int i = 0; i < 4; i = i + 1) {
-   for (int j = 0; j < 4; j++) {
-    W_Matrix[i][j] = keyHex[i][j];
+    for (int j = 0; j < 4; j++) {
+      W_Matrix[i][j] = keyHex[i][j];
    }
   }
 
   String[][] w_new = null;
   for (int j = 4; j < 44; j++) {
-   if (j % 4 != 0) {
-    for (int i = 0; i < 4; i++) {
-     W_Matrix[i][j] = computeXOR(W_Matrix[i][j - 4], W_Matrix[i][j - 1]);
+    if (j % 4 != 0) {
+      for (int i = 0; i < 4; i++) {
+        W_Matrix[i][j] = computeXOR(W_Matrix[i][j - 4], W_Matrix[i][j - 1]);
     }
    } else {
-    w_new = new String[1][4];
-
-    for(int i=0;i<4;i++){
-     w_new[0][i] = W_Matrix[i][j - 1];
-    }
-    // Left-Shift ; S_BOX ; R_CON are all together done in the below lines of code
-
-    w_new[0][0] = computeXOR(aesRcon(j), aesSBox(W_Matrix[1][j - 1]));
-
-    w_new[0][1] = aesSBox(W_Matrix[2][j - 1]);
-
-    w_new[0][2] = aesSBox(W_Matrix[3][j - 1]);
-
-    //identify the first row element shifted to the bottom index
-    w_new[0][3] = aesSBox(W_Matrix[0][j - 1]);
-
-    //Compute XOR of Wnew and (j-4) element of W_MATRIX for i-th row
-    // w(j) = w(j - 4) XOR Wnew
-    //Assign the result to W_MATRIX
-    for (int i = 0; i < 4; i++) {
-     W_Matrix[i][j] = computeXOR(W_Matrix[i][j - 4], w_new[0][i]);
-    }
+       w_new = new String[1][4];
+ 
+     for(int i=0;i<4;i++){
+       w_new[0][i] = W_Matrix[i][j - 1];
+     }
+     // Left-Shift ; S_BOX ; R_CON are all together done in the below lines of code
+ 
+     w_new[0][0] = computeXOR(aesRcon(j), aesSBox(W_Matrix[1][j - 1]));
+ 
+     w_new[0][1] = aesSBox(W_Matrix[2][j - 1]);
+ 
+     w_new[0][2] = aesSBox(W_Matrix[3][j - 1]);
+ 
+     //identify the first row element shifted to the bottom index
+     w_new[0][3] = aesSBox(W_Matrix[0][j - 1]);
+ 
+     //Compute XOR of Wnew and (j-4) element of W_MATRIX for i-th row
+     // w(j) = w(j - 4) XOR Wnew
+     //Assign the result to W_MATRIX
+     for (int i = 0; i < 4; i++) {
+       W_Matrix[i][j] = computeXOR(W_Matrix[i][j - 4], w_new[0][i]);
+     }
    }
   }
 
@@ -146,12 +146,12 @@ public class aescipher {
 
   int col = 0;
   for (int i = 0; i < (input.length() - 1); i = i + 8) {
-   int row = 0;
-   for (int j = i; j < (i + 8); j = j + 2) {
-    keyHex[row][col] = input.substring(j, (j + 2));
-    ++row;
-   }
-   ++col;
+     int row = 0;
+     for (int j = i; j < (i + 8); j = j + 2) {
+       keyHex[row][col] = input.substring(j, (j + 2));
+       ++row;
+     }
+     ++col;
   }
  }
 
@@ -170,13 +170,13 @@ public class aescipher {
   String bin2 = hexToBin(val2);
 
   if ((bin1.length() - bin2.length()) < 0) {
-   bin1 = pad(bin1, (bin2.length() - bin1.length()));
+    bin1 = pad(bin1, (bin2.length() - bin1.length()));
   } else if ((bin1.length() - bin2.length()) > 0) {
-   bin2 = pad(bin2, (bin1.length() - bin2.length()));
+    bin2 = pad(bin2, (bin1.length() - bin2.length()));
   }
 
   for (int i = 0; i < bin1.length(); i++) {
-   result = result + (bin1.charAt(i) ^ bin2.charAt(i));
+    result = result + (bin1.charAt(i) ^ bin2.charAt(i));
   }
 
   String hexResult = Integer.toHexString(Integer.valueOf(result, 2));
@@ -194,9 +194,9 @@ public class aescipher {
   * @return padded string
   */
  private static String pad(String var, int numOfBits) {
-  for (int i = 0; i < numOfBits; i++) {
-   var = '0' + var;
-  }
+    for (int i = 0; i < numOfBits; i++) {
+      var = '0' + var;
+    }
   return var;
  }
 
@@ -209,20 +209,20 @@ public class aescipher {
   * @return Integer.toBinaryString(realNum)
   */
  private static String hexToBin(String hex) {
-  int realNum = Integer.parseInt(hex, 16);
-  String binary = Integer.toBinaryString(realNum);
-  return binary;
+    int realNum = Integer.parseInt(hex, 16);
+    String binary = Integer.toBinaryString(realNum);
+    return binary;
  }
 
  /**
-  * This method will return a the value corresponding to the HEX input from
-  * the S_BOX matrix. This introduces linearity in the code
-  * 
-  * @param inHex
-  * @return S_BOX[][]
-  */
+ * This method will return a the value corresponding to the HEX input from
+ * the S_BOX matrix. This introduces linearity in the code
+ * 
+ * @param inHex
+ * @return S_BOX[][]
+ */
  private static String aesSBox(String inHex) {
-  return S_BOX[Integer.parseInt(inHex.split("")[0], 16)][Integer.parseInt(inHex.split("")[1], 16)];
+    return S_BOX[Integer.parseInt(inHex.split("")[0], 16)][Integer.parseInt(inHex.split("")[1], 16)];
  }
 
  /**
@@ -235,24 +235,24 @@ public class aescipher {
   * @return R_CON[0][j/4]
   */
  private static String aesRcon(int j) {
-  return R_CON[0][j / 4];
+    return R_CON[0][j / 4];
  }
 
  /**
-  * This method prints the values stored in the
-  * W_MATRIX on console
-  */
+ * This method prints the values stored in the
+ * W_MATRIX on console
+ */
  public static void printWMatrix() {
-  for (int i = 0; i < 4; i = i + 1) {
-   for (int j = 0; j < 44; j++) {
-    System.out.print(aescipher.W_Matrix[i][j] + " | ");
+   for (int i = 0; i < 4; i = i + 1) {
+     for (int j = 0; j < 44; j++) {
+       System.out.print(aescipher.W_Matrix[i][j] + " | ");
+     }
+     System.out.println();
+     for (int j = 0; j < 44; j++) {
+       System.out.print("-----");
+     }
+     System.out.println();
    }
-   System.out.println();
-   for (int j = 0; j < 44; j++) {
-    System.out.print("-----");
-   }
-   System.out.println();
-  }
  }
 
 }
