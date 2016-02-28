@@ -1,0 +1,47 @@
+5 pts
+
+Correctness:
+
+- The program has a runtime error:
+$ java driver < testcase.txt
+Exception in thread "main" java.lang.NumberFormatException: For input string:""
+  at
+java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+  at java.lang.Integer.parseInt(Integer.java:504)
+  at aescipher.aesSBox(aescipher.java:225)
+  at aescipher.generateWMatrix(aescipher.java:118)
+  at aescipher.aesRoundKeys(aescipher.java:63)
+  at driver.main(driver.java:23)
+
+
+
+Style:
+
+- There is incorrect indentation in the aescipher file
+
+- Good block comments
+
+- Both files are missing the header. Remember: Each file must have a block
+  comment at the top which gives the name of the file, the student's name, the
+  assignment, the date, the version, and a comment about what is contained in
+  the file. For example:
+/**
+ * file: SinglyLinkedList.java
+ * author: student name
+ * course: CMPT 220
+ * assignment: project 1
+ * due date: August 30, 2003
+ * version: 1.3
+ * 
+ * This file contains the declaration of the SinglyLinkedList abstract data
+ * type.
+ */
+
+
+Efficiency and Other Comments:
+
+- The usage of HashMap may make your program less efficient.
+
+
+
+- Dr. Rivas
