@@ -1,3 +1,4 @@
+import java.util.Scanner;
 
 /**
  * The Driver class call the utility methods in aescipher.java
@@ -15,7 +16,8 @@ public class driver {
   * @param args
   */
  public static void main(String[] args) {
-  String input = args[0];
+  Scanner sc = new Scanner(System.in);
+  String input = sc.nextLine();
   input = input.toUpperCase();
 
   String roundKeysHex = aescipher.aesRoundKeys(input);
