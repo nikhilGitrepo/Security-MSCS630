@@ -1,14 +1,6 @@
 package darkwebcorp.security;
+
 /**
- * 
- * file: AEScipher.java
- * author: Nikhil
- * course: MSCS_630L_231_16S
- * assignment: Final Project - DarkWeb
- * due date: 02-May-2016
- * version: 1.0
- * 
- * Reused AES class project.
  * file: AEScipher.java author: Nikhil Hiremath course: MSCS_630L_231_16S
  * assignment: Lab_2 due date: 15-Mar-2016 version: 1.0
  * 
@@ -16,18 +8,9 @@ package darkwebcorp.security;
  * AEScipher.java is where the Core computational logic for AES encryption is
  * done.
  * 
- * Generic code for AES 128/192/256 bit 
- *   - Encryption
- *  - Decryption
- * 
  */
 public class AEScipher {
 
-  /*
-   * For Encryption
-   * reference Matrix for Rijndael S-box Substitution
-   * Reference: https://en.wikipedia.org/wiki/Rijndael_S-box
-   */
   private static final String[][] S_BOX = {
       { "63", "7C", "77", "7B", "F2", "6B", "6F", "C5", "30", "01",
         "67", "2B", "FE", "D7", "AB", "76" },
@@ -62,11 +45,6 @@ public class AEScipher {
       { "8C", "A1", "89", "0D", "BF", "E6", "42", "68", "41", "99",
                                       "2D", "0F", "B0", "54", "BB", "16" } };
 
-  /*
-   * For Encryption and Decryption
-   * reference Matrix for Rijndael key schedule substitution
-   * Reference: https://en.wikipedia.org/wiki/Rijndael_key_schedule
-   */
   private static final String[][] R_CON = {
       { "8D", "01", "02", "04", "08", "10", "20", "40", "80", "1B",
         "36", "6C", "D8", "AB", "4D", "9A" },
@@ -101,11 +79,6 @@ public class AEScipher {
       { "61", "C2", "9F", "25", "4A", "94", "33", "66", "CC", "83",
                                       "1D", "3A", "74", "E8", "CB", "8D" } };
 
-  /*
-   * For Decryption:
-   * reference Matrix for Rijndael INVERSE S-box Substitution
-   * Reference: https://en.wikipedia.org/wiki/Rijndael_S-box
-   */
   private static final String[][] INV_S_BOX = {
       { "52", "09", "6A", "D5", "30", "36", "A5", "38", "BF", "40",
         "A3", "9E", "81", "F3", "D7", "FB" },
@@ -142,31 +115,18 @@ public class AEScipher {
 
   private static String[][] W_Matrix = null;
 
-  /*
-   * For Encryption
-   * reference Matrix for Mix State during Matrix multiplication
-   * Reference: https://en.wikipedia.org/wiki/Advanced_Encryption_Standard
-   */
   private static final String[][] FIXED_STATE_MATRIX = { 
       { "02", "03", "01", "01" }, 
       { "01", "02", "03", "01" },
       { "01", "01", "02", "03" }, 
       { "03", "01", "01", "02" } };
 
-  /*
-   * For Decryption
-   * reference Matrix for INVERSE Mix State during Matrix multiplication
-   * Reference: https://en.wikipedia.org/wiki/Advanced_Encryption_Standard
-   */  
   private static final String[][] INVERSE_FIXED_STATE_MATRIX = { 
       { "0E", "0B", "0D", "09" },
       { "09", "0E", "0B", "0D" }, 
       { "0D", "09", "0E", "0B" }, 
       { "0B", "0D", "09", "0E" } };
 
-  /*
-   * Constants
-   */
   private static final String HEX_ONE_B = "1B";
 
   private static final String HEX_TWO = "02";
@@ -202,14 +162,14 @@ public class AEScipher {
    * Return value: void
    */
   private static void generateWMatrix(String[][] keyHexMatrix,int Nk) {
-    if(Nk == 4){
-      W_Matrix = new String[4][44];
-    }else if(Nk == 6 ){
-      W_Matrix = new String[4][52];
-    }else if(Nk == 8){
-      W_Matrix = new String[4][60];
-    }
-    
+	  if(Nk == 4){
+		  W_Matrix = new String[4][44];
+	  }else if(Nk == 6 ){
+		  W_Matrix = new String[4][52];
+	  }else if(Nk == 8){
+		  W_Matrix = new String[4][60];
+	  }
+	  
     for (int i = 0; i < 4; i = i + 1) {
       for (int j = 0; j < Nk; j++) {
         W_Matrix[i][j] = keyHexMatrix[i][j];
@@ -219,11 +179,11 @@ public class AEScipher {
     String[][] w_new = null;
     int columns = 0;
     if(Nk == 4){
-      columns = 44;
+    	columns = 44;
     }else if(Nk == 6){
-      columns = 52;
+    	columns = 52;
     }else if(Nk == 8){
-      columns = 60;
+    	columns = 60;
     } 
     for (int j = Nk; j < columns; j++) {
       if (j % Nk != 0) {
@@ -240,8 +200,7 @@ public class AEScipher {
         // lines of
         // code
 
-        w_new[0][0] = computeXOR(aesRcon(j,Nk), 
-            aesSBox(W_Matrix[1][j - 1], false));
+        w_new[0][0] = computeXOR(aesRcon(j,Nk), aesSBox(W_Matrix[1][j - 1], false));
 
         w_new[0][1] = aesSBox(W_Matrix[2][j - 1], false);
 
@@ -277,14 +236,14 @@ public class AEScipher {
    * Return value: The result is saved in 'keyHex' class variable
    */
   private static String[][] generateKeyMatrix(String input) {
-    String[][] keyHexMatrix = null;
-    if(input.length() == 32){
-      keyHexMatrix = new String[4][4];
-    }else if(input.length() == 48 ){
-      keyHexMatrix = new String[4][6];
-    }else if(input.length() == 64 ){
-      keyHexMatrix = new String[4][8];
-    }
+	  String[][] keyHexMatrix = null;
+	  if(input.length() == 32){
+		  keyHexMatrix = new String[4][4];
+	  }else if(input.length() == 48 ){
+		  keyHexMatrix = new String[4][6];
+	  }else if(input.length() == 64 ){
+		  keyHexMatrix = new String[4][8];
+	  }
     int col = 0;
     for (int i = 0; i < (input.length() - 1); i = i + 8) {
       int row = 0;
@@ -329,8 +288,7 @@ public class AEScipher {
       result = result + (bin1.charAt(i) ^ bin2.charAt(i));
     }
 
-    String hexResult = 
-        Integer.toHexString(Integer.valueOf(result, 2)).toUpperCase();
+    String hexResult = Integer.toHexString(Integer.valueOf(result, 2)).toUpperCase();
     return hexResult.length() == 1 ? ("0" + hexResult) : hexResult;
 
   }
@@ -400,11 +358,9 @@ public class AEScipher {
    */
   private static String aesSBox(String inHex, boolean isInverse) {
     if (!isInverse) {
-      return S_BOX[Integer.parseInt(inHex.split("")[0], 16)]
-          [Integer.parseInt(inHex.split("")[1], 16)];
+      return S_BOX[Integer.parseInt(inHex.split("")[0], 16)][Integer.parseInt(inHex.split("")[1], 16)];
     } else {
-      return INV_S_BOX[Integer.parseInt(inHex.split("")[0], 16)]
-          [Integer.parseInt(inHex.split("")[1], 16)];
+      return INV_S_BOX[Integer.parseInt(inHex.split("")[0], 16)][Integer.parseInt(inHex.split("")[1], 16)];
     }
   }
 
@@ -527,8 +483,7 @@ public class AEScipher {
    * 
    * Return value: New State output after substitution.
    */
-  private static String[][] aesNibbleSub(String[][] inStateHex, 
-      boolean isInverse) {
+  private static String[][] aesNibbleSub(String[][] inStateHex, boolean isInverse) {
     String[][] outStateHex = new String[4][4];
     for (int i = 0; i < 4; i++) {
       for (int j = 0; j < 4; j++) {
@@ -688,8 +643,7 @@ public class AEScipher {
    * 
    *   Return value: The
    */
-  private static String[][] aesMixColumn(String[][] inStateHex, 
-      String[][] FIXED_STATE_MATRIX) {
+  private static String[][] aesMixColumn(String[][] inStateHex, String[][] FIXED_STATE_MATRIX) {
     String[][] resultMartrix = new String[4][4];
     for (int i = 0; i < 4; i++) {
       String hexXORofProduct = HEX_ZERO;
@@ -697,10 +651,8 @@ public class AEScipher {
         for (int j = 0; j < 4; j++) {
 
           hexXORofProduct = computeXOR(hexXORofProduct,
-              FIXED_STATE_MATRIX[i][j].equals(HEX_ONE) == true ? 
-                  inStateHex[j][k] : 
-                    cryptographicMultiplication(FIXED_STATE_MATRIX[i][j], 
-                        inStateHex[j][k]));
+              FIXED_STATE_MATRIX[i][j].equals(HEX_ONE) == true ? inStateHex[j][k]
+                  : cryptographicMultiplication(FIXED_STATE_MATRIX[i][j], inStateHex[j][k]));
 
           if (j == 3) {
             resultMartrix[i][k] = hexXORofProduct;
@@ -730,8 +682,7 @@ public class AEScipher {
    * @param inStateHexVal
    * @return: intermediateRes
    */
-  private static String cryptographicMultiplication(String fixedMatrixVal,
-      String inStateHexVal) {
+  private static String cryptographicMultiplication(String fixedMatrixVal, String inStateHexVal) {
 
     String intermediateRes = "";
     String MSB_str;
@@ -751,13 +702,11 @@ public class AEScipher {
 
       if (Integer.parseInt(MSB_str, 16) > 7) {
         // MSB == 1
-        intermediateRes = computeXOR(inStateHexVal,
-            computeShiftXOR(inStateHexVal));
+        intermediateRes = computeXOR(inStateHexVal, computeShiftXOR(inStateHexVal));
 
       } else {
         // MSB == 0
-        intermediateRes = computeXOR(inStateHexVal, hexMultiplication(HEX_TWO,
-            inStateHexVal));
+        intermediateRes = computeXOR(inStateHexVal, hexMultiplication(HEX_TWO, inStateHexVal));
 
       }
     } else {
@@ -883,7 +832,7 @@ public class AEScipher {
    *   encryption process.
    */
   public static String aes(String pTextHex, String keyHex) {
-    StringBuilder buffer = new StringBuilder();
+	  StringBuilder buffer = new StringBuilder();
 
     String[][] plainTextHex = new String[4][4];
     // Call the helper method to generate Plain text Matrix
@@ -895,16 +844,16 @@ public class AEScipher {
 
     int Nk = 0;
     int roundMax = 0;
-    if(keyHex.length() == 32){
-      Nk = 4;
-      roundMax = 11;
-    }else if(keyHex.length() == 48 ){
-      Nk = 6;
-      roundMax = 13;      
-    }else if(keyHex.length() == 64 ){
-      Nk = 8;
-      roundMax = 15;      
-    }
+	  if(keyHex.length() == 32){
+		  Nk = 4;
+		  roundMax = 11;
+	  }else if(keyHex.length() == 48 ){
+		  Nk = 6;
+		  roundMax = 13;		  
+	  }else if(keyHex.length() == 64 ){
+		  Nk = 8;
+		  roundMax = 15;		  
+	  }
     
     // Call the helper method to generate W_Matrix
     generateWMatrix(keyHexMatrix,Nk);
@@ -971,8 +920,7 @@ public class AEScipher {
     int column = 0;
     for (int i = 0; i < 4; i = i + 1) {
       column = 0;
-      for (int j = round * col_range;
-          j < ((round * col_range) + col_range); j = j + 1) {
+      for (int j = round * col_range; j < ((round * col_range) + col_range); j = j + 1) {
         roundKey[i][column] = W_Matrix[i][j];
         if (column == (col_range-1)) {
           column = 0;
@@ -1006,6 +954,7 @@ public class AEScipher {
    * Return value: 
    */
   public static String aesDecrypt(String cTextHex, String keyHex) {
+	StringBuilder buffer = new StringBuilder();
 
     String[][] plainTextHex = new String[4][4];
     // Call the helper method to generate Plain text Matrix
@@ -1017,16 +966,16 @@ public class AEScipher {
 
     int Nk = 0;
     int roundMax = 0;
-    if(keyHex.length() == 32){
-      Nk = 4;
-      roundMax = 11;
-    }else if(keyHex.length() == 48 ){
-      Nk = 6;
-      roundMax = 13;      
-    }else if(keyHex.length() == 64 ){
-      Nk = 8;
-      roundMax = 15;      
-    }
+	  if(keyHex.length() == 32){
+		  Nk = 4;
+		  roundMax = 11;
+	  }else if(keyHex.length() == 48 ){
+		  Nk = 6;
+		  roundMax = 13;		  
+	  }else if(keyHex.length() == 64 ){
+		  Nk = 8;
+		  roundMax = 15;		  
+	  }
     
     // Call the helper method to generate W_Matrix
     generateWMatrix(keyHexMatrix,Nk);
@@ -1035,29 +984,47 @@ public class AEScipher {
     // ( PlainTextMatrix ^ Round_Key_0 )
     String[][] outStateHex = new String[4][4];
 
-    outStateHex = aesStateXOR(plainTextHex, fetchRoundKey(10,4));
-
+    outStateHex = aesStateXOR(plainTextHex, fetchRoundKey(roundMax-1,4));
+/*    System.out.println("round[ 0].iinput  "+ printState(plainTextHex));
+    System.out.println("round[ 0].ik_sch  "+ printState(fetchRoundKey(roundMax-1,4)));*/
+    
     // Loop the next three line for 11 times,
     // Implementation of Round_1 to Round_11 -->> for next 10 Rounds
     for (int round = (roundMax-2); round >= 0; round--) {
+      /*System.out.println("round[ "+(round-13)+"].istart  "+ printState(outStateHex));*/
       outStateHex = aesInverseShiftRow(outStateHex);
+      
+/*      System.out.println("round[ "+(round-13)+"].is_row  "+ printState(outStateHex));*/
+      
       outStateHex = aesNibbleSub(outStateHex, true);
+      
+/*      System.out.println("round[ "+(round-13)+"].is_box  "+ printState(outStateHex));
+      
+      System.out.println( "round[ "+(round-13)+"].ik_sch  "+ printState(fetchRoundKey(round,4)));*/
       outStateHex = aesStateXOR(outStateHex, fetchRoundKey(round,4));
-
+      
+      /*System.out.println( "round[ "+(round-13)+"].ik_add  "+ printState(outStateHex));*/
+      
       // We don't Mix Column in the last round
       if (round != 0) {
         // The FIXED STATE input is changed for mixed Column
         outStateHex = aesMixColumn(outStateHex, INVERSE_FIXED_STATE_MATRIX);
       }
+/*      System.out.println("round[ "+(round-13)+"].istart  "+ printState(outStateHex));
+      System.out.println("------------------------");*/
     }
 
-    StringBuilder buffer = new StringBuilder();
-    for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < 4; j++) {
-        buffer.append(outStateHex[j][i]);
-      }
-    }
-    return buffer.toString();
+    return printState(outStateHex);
+  }
+  
+  public static String printState(String[][] outStateHex){
+	  StringBuilder buffer = new StringBuilder();
+	    for (int i = 0; i < 4; i++) {
+	        for (int j = 0; j < 4; j++) {
+	          buffer.append(outStateHex[j][i]);
+	        }
+	      }
+	    return buffer.toString();
   }
 
 }
